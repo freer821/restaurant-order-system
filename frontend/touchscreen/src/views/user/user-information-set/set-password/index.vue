@@ -47,7 +47,6 @@
 
 <script>
 import { authCaptcha, authReset, authLogout } from '@/api/api';
-import { removeLocalStorage } from '@/utils/local-storage';
 import { Field } from 'vant';
 
 export default {

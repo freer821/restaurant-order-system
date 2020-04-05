@@ -248,13 +248,18 @@ public class WxGoodsController {
 	/**
 	 * 商品分类类目
 	 *
-	 * @param id 分类类目ID
 	 * @return 商品分类类目
 	 */
 	@GetMapping("fastfoodCategory")
 	public Object fastfoodCategory() {
-		List<LitemallCategory> foodCategories = categoryService.queryByPid(1005000);
-		return ResponseUtil.ok(foodCategories);
+		List<LitemallCategory> parentCategories = categoryService.queryL1CategoryByKeyword("fastfood");
+		List<LitemallCategory> childCategoreies = new ArrayList<>();
+
+		for (LitemallCategory category: parentCategories) {
+			childCategoreies.addAll(categoryService.queryByPid(category.getId()));
+		}
+
+		return ResponseUtil.ok(childCategoreies);
 	}
 
 	/**

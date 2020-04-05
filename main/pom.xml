@@ -63,7 +63,7 @@
                             <outputDirectory>${basedir}/target/classes/static/admin</outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>frontend/admin/dist</directory>
+                                    <directory>../frontend/admin/dist</directory>
                                 </resource>
                             </resources>
                         </configuration>
@@ -78,7 +78,7 @@
                             <outputDirectory>${basedir}/target/classes/static/touchscreen</outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>frontend/touchscreen/dist</directory>
+                                    <directory>../frontend/touchscreen/dist</directory>
                                 </resource>
                             </resources>
                         </configuration>

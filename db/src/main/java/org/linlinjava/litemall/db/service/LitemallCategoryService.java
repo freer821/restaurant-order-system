@@ -43,6 +43,13 @@ public class LitemallCategoryService {
         return categoryMapper.selectByExample(example);
     }
 
+    public List<LitemallCategory> queryL1CategoryByKeyword(String keyword) {
+        LitemallCategoryExample example = new LitemallCategoryExample();
+        example.or().andLevelEqualTo("L1").andKeywordsEqualTo(keyword).andDeletedEqualTo(false);
+        return categoryMapper.selectByExample(example);
+    }
+
+
     public List<LitemallCategory> queryByPid(Integer pid) {
         LitemallCategoryExample example = new LitemallCategoryExample();
         example.or().andPidEqualTo(pid).andDeletedEqualTo(false);

@@ -31,6 +31,7 @@ export default {
     },
     saveNick() {
       authProfile({ nickname: this.nickName }).then(res => {
+          console.log(res);
         localStorage.setItem('nickName', this.nickName);
         this.$dialog.alert({ message: '保存成功' }).then(() => {
           this.$router.go(-1);
