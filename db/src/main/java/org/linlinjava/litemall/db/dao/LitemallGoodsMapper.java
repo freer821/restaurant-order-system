@@ -1,6 +1,5 @@
 package org.linlinjava.litemall.db.dao;
 
-import java.util.HashMap;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.linlinjava.litemall.db.domain.LitemallGoods;
@@ -182,7 +181,4 @@ public interface LitemallGoodsMapper {
      * @mbg.generated
      */
     int logicalDeleteByPrimaryKey(Integer id);
-
-    HashMap<Integer, List<LitemallGoods>> getAccessories(@Param("catIds") int[] catIds);
-
 }

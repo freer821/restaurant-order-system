@@ -143,7 +143,12 @@ export default {
 								});
 						}
 					} else {
-						//todo : alipay
+						Dialog.alert({
+							title: 'Pay successfully!',
+							message: 'Please take the note and go to the bar!'
+						}).then(() => {
+							this.$router.push('/');
+						});
 					}
 				})
 				.catch(err => {
