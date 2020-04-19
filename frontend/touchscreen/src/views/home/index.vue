@@ -205,7 +205,12 @@ export default {
 
 				property_obj.k_id = accessory.id;
 				property_obj.k = accessory.name;
-				property_obj.is_multiple = false;
+
+				if (accessory.name === 'Extra') {
+					property_obj.is_multiple = true;
+				} else {
+					property_obj.is_multiple = false;
+				}
 				property_obj.v = v;
 				properties_list.push(property_obj);
 			});
