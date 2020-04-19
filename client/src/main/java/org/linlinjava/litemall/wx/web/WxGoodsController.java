@@ -96,12 +96,23 @@ public class WxGoodsController {
 		LitemallGoods info = goodsService.findById(id);
 
 
-		Callable<Map> accessoryListCallable = () -> {
-			Map<String, List<LitemallGoods>> accessories = new HashMap<>();
+		Callable<List> accessoryListCallable = () -> {
+			List<Object> accessories = new ArrayList<>();
 
 			if (info.getAccessories().length > 0) {
 				for (String cate_id: info.getAccessories() ) {
-					accessories.put(cate_id, goodsService.queryByCategory(Integer.parseInt(cate_id), 0, SystemConfig.getCatlogListLimit()));
+					LitemallCategory category = categoryService.findById(Integer.parseInt(cate_id));
+					List<LitemallGoods> goods = goodsService.queryByCategory(Integer.parseInt(cate_id), 0, SystemConfig.getCatlogListLimit());
+					Map<String, Object>  accessory= new HashMap<>();
+					accessory.put("id", category.getId());
+					accessory.put("name", category.getName());
+					accessory.put("keywords", category.getKeywords());
+					accessory.put("desc", category.getDesc());
+					accessory.put("pid", category.getPid());
+					accessory.put("iconUrl", category.getIconUrl());
+					accessory.put("picUrl", category.getPicUrl());
+					accessory.put("goods", goods);
+					accessories.add(accessory);
 				}
 			}
 
@@ -181,7 +192,7 @@ public class WxGoodsController {
 		FutureTask<Map> commentsCallableTsk = new FutureTask<>(commentsCallable);
 		FutureTask<LitemallBrand> brandCallableTask = new FutureTask<>(brandCallable);
         FutureTask<List> grouponRulesCallableTask = new FutureTask<>(grouponRulesCallable);
-		FutureTask<Map> accessoryListCallableTsk = new FutureTask<>(accessoryListCallable);
+		FutureTask<List> accessoryListCallableTsk = new FutureTask<>(accessoryListCallable);
 
 		executorService.submit(goodsAttributeListTask);
 		executorService.submit(objectCallableTask);

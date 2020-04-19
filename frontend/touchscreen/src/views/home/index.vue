@@ -191,25 +191,26 @@ export default {
 			return sku_list;
 		},
 		setProperties() {
-			return [
-				{
-					k_id: 123, // 属性id
-					k: '加料', // 属性名
-					is_multiple: false, // 是否可多选
-					v: [
-						{
-							id: 1222, // 属性值id
-							name: '珍珠', // 属性值名
-							price: 1000, // 属性值加价
-						},
-						{
-							id: 1223,
-							name: '椰果',
-							price: 1000,
-						},
-					],
-				}
-			];
+			let properties_list = [];
+			_.each(this.good.accessories, accessory => {
+				let property_obj = {};
+				let v = [];
+				_.each(accessory.goods, (good) => {
+					v.push({
+						id: good.id,
+						name: good.name,
+						price: good.retailPrice*100
+					})
+				});
+
+				property_obj.k_id = accessory.id;
+				property_obj.k = accessory.name;
+				property_obj.is_multiple = false;
+				property_obj.v = v;
+				properties_list.push(property_obj);
+			});
+
+			return properties_list;
 		},
 		findSpecValueIdByName(name) {
 			let id = 0;
