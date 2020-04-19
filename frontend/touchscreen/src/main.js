@@ -2,8 +2,6 @@ import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
 import 'vant/lib/icon/local.css';
-import enUS from 'vant/lib/locale/lang/en-US';
-
 import '@/assets/scss/global.scss';
 import '@/assets/scss/iconfont/iconfont.css';
 
@@ -14,11 +12,11 @@ import filters from '@/filter';
 Vue.component(VueCountdown.name, VueCountdown);
 Vue.use(filters);
 
-import { Lazyload, Icon, Cell, CellGroup, loading, Button, Toast, Col, Row, Image, Sku, Locale } from 'vant';
+import { Lazyload, Icon, Cell, CellGroup, Loading, Button, Toast, Locale, Col, Row, Image, Sku } from 'vant';
 Vue.use(Icon);
 Vue.use(Cell);
 Vue.use(CellGroup);
-Vue.use(loading);
+Vue.use(Loading);
 Vue.use(Button);
 Vue.use(Toast);
 Vue.use(Col);
@@ -34,7 +32,10 @@ Vue.use(Lazyload, {
   lazyComponent: true
 });
 
+Vue.use(Locale);
+import enUS from 'vant/lib/locale/lang/en-US';
 Locale.use('en-US', enUS);
+
 
 Vue.config.productionTip = false
 

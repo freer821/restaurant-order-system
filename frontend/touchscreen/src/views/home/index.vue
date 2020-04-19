@@ -39,10 +39,11 @@
     </div>
     <van-sku
       v-model="showSku"
-      :sku="sku"
-      :hide-stock="true"
-      :goods="skuGoods"
-      :goodsId="goods.info.id"
+	  :sku="sku"
+	  :properties="properties"
+	  :hide-stock="true"
+	  :goods="skuGoods"
+      :goodsId="good.info.id"
       close-on-click-overlay
       @buy-clicked="buyGoods"
       @add-cart="addCart"
@@ -97,7 +98,7 @@ export default {
 			limit: 100,
 			goodsList: [],
 			showSku: false,
-			goods: {
+			good: {
 				userHasCollect: 0,
 				info: {
 					gallery: []
@@ -108,6 +109,7 @@ export default {
 				list: [],
 				price: '1.00' // 默认价格（单位元）
 			},
+			properties:[],
 			skuGoods: {
 				// 商品标题
 				title: '',
@@ -150,10 +152,11 @@ export default {
 			});
 		},
 		skuAdapter() {
+			console.log(this.good);
 			const tree = this.setSkuTree();
 			const list = this.setSkuList();
 			const skuInfo = {
-				price: parseInt(this.goods.info.retailPrice), // 未选择规格时的价格
+				price: parseInt(this.good.info.retailPrice), // 未选择规格时的价格
 				stock_num: 0, // TODO 总库存
 				collection_id: '', // 无规格商品skuId取collection_id，否则取所选sku组合对应的id
 				none_sku: false, // 是否无规格商品
@@ -165,13 +168,14 @@ export default {
 				...skuInfo
 			};
 			this.skuGoods = {
-				title: this.goods.info.name,
-				picture: this.goods.info.picUrl
+				title: this.good.info.name,
+				picture: this.good.info.picUrl
 			};
+			this.properties = this.setProperties();
 		},
 		setSkuList() {
 			var sku_list = [];
-			_.each(this.goods.productList, v => {
+			_.each(this.good.productList, v => {
 				var sku_list_obj = {};
 				_.each(v.specifications, (specificationName, index) => {
 					sku_list_obj['s' + (~~index + 1)] = this.findSpecValueIdByName(
@@ -186,9 +190,30 @@ export default {
 
 			return sku_list;
 		},
+		setProperties() {
+			return [
+				{
+					k_id: 123, // 属性id
+					k: '加料', // 属性名
+					is_multiple: false, // 是否可多选
+					v: [
+						{
+							id: 1222, // 属性值id
+							name: '珍珠', // 属性值名
+							price: 1000, // 属性值加价
+						},
+						{
+							id: 1223,
+							name: '椰果',
+							price: 1000,
+						},
+					],
+				}
+			];
+		},
 		findSpecValueIdByName(name) {
 			let id = 0;
-			_.each(this.goods.specificationList, specification => {
+			_.each(this.good.specificationList, specification => {
 				_.each(specification.valueList, specValue => {
 					if (specValue.value === name) {
 						id = specValue.id;
@@ -203,7 +228,7 @@ export default {
 		},
 		setSkuTree() {
 			let specifications = [];
-			_.each(this.goods.specificationList, (v, k) => {
+			_.each(this.good.specificationList, (v, k) => {
 				let values = [];
 				_.each(v.valueList, vv => {
 					vv.name = vv.value;
@@ -226,7 +251,7 @@ export default {
 
 		itemClick(id) {
 			goodsDetail({ id: id }).then(res => {
-				this.goods = res.data.data;
+				this.good = res.data.data;
 				this.skuAdapter();
 				this.showSku = true;
 			});
@@ -299,7 +324,7 @@ export default {
 		getProductIdByOne(s1) {
 			var productId;
 			var s1_name;
-			_.each(this.goods.specificationList, specification => {
+			_.each(this.good.specificationList, specification => {
 				_.each(specification.valueList, specValue => {
 					if (specValue.id === s1) {
 						s1_name = specValue.value;
@@ -308,7 +333,7 @@ export default {
 				});
 			});
 
-			_.each(this.goods.productList, v => {
+			_.each(this.good.productList, v => {
 				let result = _.without(v.specifications, s1_name);
 				if (result.length === 0) {
 					productId = v.id;

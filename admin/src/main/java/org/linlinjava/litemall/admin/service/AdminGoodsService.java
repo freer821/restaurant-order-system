@@ -176,9 +176,9 @@ public class AdminGoodsService {
         // 商品规格表litemall_goods_specification
         for (LitemallGoodsSpecification specification : specifications) {
             // 目前只支持更新规格表的图片字段
-            if(specification.getUpdateTime() == null){
-                specification.setSpecification(null);
-                specification.setValue(null);
+            if (specification.getId() == null) {
+                specificationService.add(specification);
+            } else {
                 specificationService.updateById(specification);
             }
         }
