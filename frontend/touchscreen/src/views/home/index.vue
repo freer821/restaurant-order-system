@@ -44,6 +44,7 @@
 	  :hide-stock="true"
 	  :goods="skuGoods"
       :goodsId="good.info.id"
+	  :initial-sku="initialSku"
       close-on-click-overlay
       @buy-clicked="buyGoods"
       @add-cart="addCart"
@@ -115,6 +116,9 @@ export default {
 				title: '',
 				// 默认商品 sku 缩略图
 				picture: ''
+			},
+			initialSku:{
+				selectedProp:{}
 			}
 		};
 	},
@@ -152,7 +156,6 @@ export default {
 			});
 		},
 		skuAdapter() {
-			console.log(this.good);
 			const tree = this.setSkuTree();
 			const list = this.setSkuList();
 			const skuInfo = {
@@ -172,6 +175,7 @@ export default {
 				picture: this.good.info.picUrl
 			};
 			this.properties = this.setProperties();
+			this.setInitialSku();
 		},
 		setSkuList() {
 			var sku_list = [];
@@ -216,6 +220,21 @@ export default {
 			});
 
 			return properties_list;
+		},
+		setInitialSku() {
+			let attributes = this.good.attribute;
+			for (let i = 0; i < attributes.length; i++ ) {
+				let attribute = attributes[i];
+				this.properties.forEach(p => {
+					if (p.k.toUpperCase() === attribute.attribute.toUpperCase() ) {
+						p.v.forEach( v => {
+							if (v.name.toUpperCase() === attribute.value.toUpperCase()) {
+								this.initialSku.selectedProp[p.k_id]=[v.id]
+							}
+						});
+					}
+				})
+			}
 		},
 		findSpecValueIdByName(name) {
 			let id = 0;
@@ -269,7 +288,6 @@ export default {
 			this.showSku = true;
 		},
 		addCart(data) {
-			console.log(data);
 			let that = this;
 			let params = {
 				goodsId: data.goodsId,
@@ -290,6 +308,7 @@ export default {
 			} else {
 				params.productId = this.getProductIdByOne(data.selectedSkuComb.s1);
 			}
+			params.specifications = this.getSpecifications(data.selectedSkuComb.properties);
 			cartAdd(params).then(() => {
 				this.cartInfo = this.cartInfo + data.selectedNum;
 				this.$toast({
@@ -328,8 +347,8 @@ export default {
 			});
 		},
 		getProductIdByOne(s1) {
-			var productId;
-			var s1_name;
+			let productId;
+			let s1_name;
 			_.each(this.good.specificationList, specification => {
 				_.each(specification.valueList, specValue => {
 					if (specValue.id === s1) {
@@ -346,6 +365,19 @@ export default {
 				}
 			});
 			return productId;
+		},
+		getSpecifications(properties) {
+			let specifications = [];
+			if (properties && properties.length > 0) {
+				_.each(properties, property => {
+					_.each(property.v, v => {
+						specifications.push(v.name);
+					});
+				});
+
+			}
+			return specifications;
+
 		}
 	},
 	components: {

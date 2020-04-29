@@ -17,7 +17,7 @@
     </van-cell-group>
 
     <div class="pay_way_group">
-      <div class="pay_way_title">选择支付方式</div>
+      <div class="pay_way_title">Payment</div>
       <van-radio-group v-model="payWay">
         <van-cell-group>
           <van-cell title="Credit Card">
@@ -41,9 +41,9 @@
 
 <script>
 import { Radio, RadioGroup, Dialog } from 'vant';
-import { orderDetail, orderPrepay, orderH5pay } from '@/api/api';
+import { orderDetail, orderShoppay } from '@/api/api';
 import _ from 'lodash';
-import { getLocalStorage, setLocalStorage } from '@/utils/local-storage';
+import { getLocalStorage } from '@/utils/local-storage';
 
 export default {
 	name: 'payment',
@@ -73,79 +73,33 @@ export default {
 		pay() {
 			Dialog.confirm({
 				message:
-					'你选择了' + (this.payWay === 'cash' ? '微信支付' : '支付宝支付')
+					'You have chosen' + (this.payWay === 'cash' ? 'Cash Pay' : 'Credit Pay')
 			})
 				.then(() => {
-					if (this.payWay === 'wx') {
-						let ua = navigator.userAgent.toLowerCase();
-						let isWeixin = ua.indexOf('micromessenger') != -1;
-						if (isWeixin) {
-							orderPrepay({ orderId: this.orderId })
-								.then(res => {
-									let data = res.data.data;
-									let prepay_data = JSON.stringify({
-										appId: data.appId,
-										timeStamp: data.timeStamp,
-										nonceStr: data.nonceStr,
-										package: data.packageValue,
-										signType: 'MD5',
-										paySign: data.paySign
-									});
-									setLocalStorage({ prepay_data: prepay_data });
-
-									if (typeof WeixinJSBridge == 'undefined') {
-										if (document.addEventListener) {
-											document.addEventListener(
-												'WeixinJSBridgeReady',
-												this.onBridgeReady,
-												false
-											);
-										} else if (document.attachEvent) {
-											document.attachEvent(
-												'WeixinJSBridgeReady',
-												this.onBridgeReady
-											);
-											document.attachEvent(
-												'onWeixinJSBridgeReady',
-												this.onBridgeReady
-											);
-										}
-									} else {
-										this.onBridgeReady();
+					if (this.payWay === 'credit') {
+						orderShoppay({ orderId: this.orderId })
+							.then(res => {
+								let data = res.data.data;
+								Dialog.alert({
+									title: 'success pay!',
+									message: data
+								}).then(() => {
+									this.$router.push('/');
+								});
+							})
+							.catch(err => {
+								Dialog.alert({ message: err });
+								this.$router.replace({
+									name: 'paymentStatus',
+									params: {
+										status: 'failed'
 									}
-								})
-								.catch(err => {
-									Dialog.alert({ message: err.data.errmsg });
-									this.$router.replace({
-										name: 'paymentStatus',
-										params: {
-											status: 'failed'
-										}
-									});
 								});
-						} else {
-							orderH5pay({ orderId: this.orderId })
-								.then(res => {
-									let data = res.data.data;
-									window.location.replace(
-										data.mwebUrl +
-											'&redirect_url=' +
-											encodeURIComponent(
-												window.location.origin +
-													'/#/?orderId=' +
-													this.orderId +
-													'&tip=yes'
-											)
-									);
-								})
-								.catch(err => {
-									Dialog.alert({ message: err.data.errmsg });
-								});
-						}
+							});
 					} else {
 						Dialog.alert({
-							title: 'Pay successfully!',
-							message: 'Please take the note and go to the bar!'
+							title: 'Cash Pay, please take your note and go to cashier desk!',
+							message: this.order
 						}).then(() => {
 							this.$router.push('/');
 						});

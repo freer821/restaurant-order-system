@@ -61,9 +61,9 @@ import { Toast } from 'vant';
 export default {
   name: 'login-request',
   components: {
-    [field.name]: field,
-    [fieldGroup.name]: fieldGroup,
-    Toast
+  	[field.name]: field,
+	[fieldGroup.name]: fieldGroup,
+	[Toast.name]: Toast
   },
   data() {
     return {
@@ -86,6 +86,7 @@ export default {
 
     login() {
       let loginData = this.getLoginData();
+      console.log(loginData);
       authLoginByAccount(loginData).then(res => {
         this.userInfo = res.data.data.userInfo;
         setLocalStorage({

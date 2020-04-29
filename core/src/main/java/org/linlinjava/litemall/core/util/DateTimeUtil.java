@@ -15,7 +15,7 @@ public class DateTimeUtil {
      * @return
      */
     public static String getDateTimeDisplayString(LocalDateTime dateTime) {
-        DateTimeFormatter dtf2 = DateTimeFormatter.ofPattern("yyyy年MM月dd日 HH:mm:ss");
+        DateTimeFormatter dtf2 = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
         String strDate2 = dtf2.format(dateTime);
 
         return strDate2;

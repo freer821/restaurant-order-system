@@ -175,7 +175,8 @@ export default {
 			if (this.availableCouponLength !== 0) {
 				return this.availableCouponLength + '张可用';
 			}
-			return '没有可用优惠券';
+			//return '没有可用优惠券';
+			return '';
 		},
 		getCoupons() {
 			const { CartId } = getLocalStorage('CartId');
@@ -258,7 +259,18 @@ export default {
 			this.init();
 		},
 		onExchange() {
-			this.$toast('兑换暂不支持');
+			this.coupons.push({
+				id: 1,
+				cid: 9,
+				condition: '无使用门槛\n最多优惠12元',
+				reason: '',
+				value: 150,
+				name: '优惠券名称',
+				startAt: 1489104000,
+				endAt: 2514592000,
+				valueDesc: '1.5',
+				unitDesc: '元',
+			})
 		}
 	},
 

@@ -137,7 +137,7 @@ public class WxCartController {
         LitemallGoodsProduct product = productService.findById(productId);
         //判断购物车中是否存在此规格商品
         LitemallCart existCart = cartService.queryExist(goodsId, productId, userId);
-        if (existCart == null) {
+        if (existCart == null || !Arrays.equals(existCart.getSpecifications(),cart.getSpecifications())) {
             //取得规格的信息,判断规格库存
             if (product == null || number > product.getNumber()) {
                 return ResponseUtil.fail(GOODS_NO_STOCK, "库存不足");
@@ -153,7 +153,7 @@ public class WxCartController {
                 cart.setPicUrl(product.getUrl());
             }
             cart.setPrice(product.getPrice());
-            cart.setSpecifications(product.getSpecifications());
+            //cart.setSpecifications(product.getSpecifications());
             cart.setUserId(userId);
             cart.setChecked(true);
             cartService.add(cart);

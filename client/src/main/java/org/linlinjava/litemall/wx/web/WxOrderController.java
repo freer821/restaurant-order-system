@@ -104,6 +104,11 @@ public class WxOrderController {
         return wxOrderService.h5pay(userId, body, request);
     }
 
+    @PostMapping("shoppay")
+    public Object shoppay(@LoginUser Integer userId, @RequestBody String body) {
+        return wxOrderService.shoppay(userId, body);
+    }
+
     /**
      * 微信付款成功或失败回调接口
      * <p>

@@ -5,7 +5,7 @@
       v-show="goods.length"
     >
       <van-icon :name="isEditor ? 'success' : 'editor'" />
-      <span @click="isEditor = !isEditor">{{isEditor ? '完成' : '编辑'}}</span>
+      <span @click="isEditor = !isEditor">{{isEditor ? 'Finish' : 'Edit'}}</span>
     </div>
     <van-checkbox-group
       @change="toggle"

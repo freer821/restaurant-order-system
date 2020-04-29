@@ -10,6 +10,7 @@ public class CategoryVo {
     private String iconUrl;
     private String picUrl;
     private String level;
+    private Integer pid;
     private List<CategoryVo> children;
 
     public List<CategoryVo> getChildren() {
@@ -26,6 +27,14 @@ public class CategoryVo {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getPid() {
+        return pid;
+    }
+
+    public void setPid(Integer id) {
+        this.pid = id;
     }
 
     public String getName() {

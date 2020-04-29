@@ -113,6 +113,12 @@
 
     <el-card class="box-card">
       <h3>商品规格</h3>
+      <el-row :gutter="20" type="flex" align="middle" style="padding:20px 0;">
+        <el-col>
+          <el-button :plain="true" type="primary" @click="handleSpecificationShow">添加</el-button>
+        </el-col>
+      </el-row>
+
       <el-table :data="specifications">
         <el-table-column property="specification" label="规格名" />
         <el-table-column property="value" label="规格值">
@@ -137,10 +143,10 @@
       <el-dialog :visible.sync="specVisiable" title="设置规格">
         <el-form ref="specForm" :rules="rules" :model="specForm" status-icon label-position="left" label-width="100px" style="width: 400px; margin-left:50px;">
           <el-form-item label="规格名" prop="specification">
-            <el-input v-model="specForm.specification" disabled />
+            <el-input v-model="specForm.specification" />
           </el-form-item>
           <el-form-item label="规格值" prop="value">
-            <el-input v-model="specForm.value" disabled />
+            <el-input v-model="specForm.value" />
           </el-form-item>
           <el-form-item label="规格图片" prop="picUrl">
             <el-upload
@@ -339,7 +345,7 @@ export default {
       }
     },
     attributesData() {
-      return this.attributes.filter(attribute => attribute.deleted === false)
+      return this.attributes.filter(attribute => attribute.deleted !== true)
     }
   },
   created() {
