@@ -17,7 +17,7 @@
           </div>
         </div>
       </van-cell>
-    </van-cell-group>-->
+    </van-cell-group>
 
     <van-cell-group>
       <van-cell
@@ -27,7 +27,7 @@
         :value="getCouponValue()"
         @click="getCoupons"
       />
-    </van-cell-group>
+    </van-cell-group-->
 
     <!-- 优惠券列表 -->
     <van-popup
@@ -50,6 +50,7 @@
       :num="item.number"
       :price="item.price +'.00'"
       :thumb="item.picUrl"
+	  currency="€"
     >
       <div slot="desc">
         <div class="van-card__desc">
@@ -66,7 +67,7 @@
     </van-card>
 
     <van-cell-group>
-      <van-cell title="商品金额">
+      <van-cell title="Total">
         <span class="red">{{goodsTotalPrice * 100 | euro}}</span>
       </van-cell>
       <!--van-cell title="优惠券">
@@ -74,8 +75,8 @@
       </van-cell-->
       <van-field
         v-model="message"
-        placeholder="请输入备注"
-        label="订单备注"
+        placeholder="Comment"
+        label="Comment"
       >
         <template slot="icon">{{message.length}}/50</template>
       </van-field>
@@ -83,8 +84,9 @@
 
     <van-submit-bar
       :price="actualPrice*100"
-      label="总计："
-      buttonText="提交订单"
+	  currency="€"
+      label="Total："
+      buttonText="Submit"
       :disabled="isDisabled"
       @submit="onSubmit"
     />

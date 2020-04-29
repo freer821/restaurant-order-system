@@ -28,6 +28,7 @@
           :price="item.price"
           :num="item.number"
           :thumb="item.picUrl"
+		  currency="€"
         >
           <div slot="desc">
             <div class="van-card__desc">
@@ -54,18 +55,18 @@
           <div
             slot="footer"
             v-else
-          >添加日期 {{item.addTime}}</div>
+          >added {{item.addTime}}</div>
         </van-card>
 
         <div
           class="cart_delete"
           v-if="isEditor"
           @click="deleteCart(i)"
-        >删除</div>
+        >Del</div>
       </div>
     </van-checkbox-group>
 
-    <is-empty v-if="!goods.length">您的购物车空空如也~</is-empty>
+    <is-empty v-if="!goods.length">No Orders~</is-empty>
 
     <van-submit-bar
       style="bottom: 50px"
@@ -73,14 +74,14 @@
       :disabled="!checkedGoods.length"
       :buttonText="submitBarText"
       :loading="isSubmit"
-      label="总计"
+	  currency="€"
       @submit="cartSubmit"
     >
       <van-checkbox
         v-model="checkedAll"
         @click="setCheckAll"
         style="padding: 0 10px;"
-      >全选</van-checkbox>
+      >All</van-checkbox>
     </van-submit-bar>
   </div>
 </template>
@@ -109,7 +110,7 @@ export default {
 	},
 	computed: {
 		submitBarText() {
-			return this.isEditor ? '删除' : '结算';
+			return this.isEditor ? 'Del' : 'Pay';
 		},
 		totalPrice() {
 			return this.goods.reduce(

@@ -32,9 +32,9 @@ Vue.use(Lazyload, {
   lazyComponent: true
 });
 
-Vue.use(Locale);
 import enUS from 'vant/lib/locale/lang/en-US';
 Locale.use('en-US', enUS);
+Vue.use(Locale);
 
 
 Vue.config.productionTip = false

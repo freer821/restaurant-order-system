@@ -1,17 +1,17 @@
 <template>
   <div class="payment">
     <div class="time_down payment_group">
-      请在
-      <span class="red">半小时内</span>
-      完成付款，否则系统自动取消订单
+      Please finish the Payment
+      <span class="red">in 30 minutes</span>
+      ，Otherwise this Order will be canceled!
     </div>
 
     <van-cell-group class="payment_group">
       <van-cell
-        title="订单编号"
+        title="Order No.:"
         :value="order.orderInfo.orderSn"
       />
-      <van-cell title="实付金额">
+      <van-cell title="Total:">
         <span class="red">{{order.orderInfo.actualPrice *100 | euro}}</span>
       </van-cell>
     </van-cell-group>
@@ -30,12 +30,21 @@
       </van-radio-group>
     </div>
 
-    <van-button
-      class="pay_submit"
-      @click="pay"
-      type="primary"
-      bottomAction
-    >去支付</van-button>
+
+	  <div class="pay_cancel_div">
+		  <van-button
+			  class="pay_submit"
+			  @click="pay"
+			  type="primary"
+			  bottomAction
+		  >Pay</van-button>
+		  <van-button
+			  class="cancel_submit"
+			  @click="cancel"
+			  type="danger"
+			  bottomAction
+		  >Canel</van-button>
+	  </div>
   </div>
 </template>
 
@@ -80,9 +89,10 @@ export default {
 						orderShoppay({ orderId: this.orderId })
 							.then(res => {
 								let data = res.data.data;
+								console.log(data)
 								Dialog.alert({
 									title: 'success pay!',
-									message: data
+									message: ''
 								}).then(() => {
 									this.$router.push('/');
 								});
@@ -108,6 +118,14 @@ export default {
 				.catch(err => {
 					console.log(err);
 				});
+		},
+		cancel() {
+			Dialog.confirm({
+				title: 'Order Cancel!',
+				message: 'after canceling this order, all of the Cart will be removed'
+			}).then(() => {
+				this.$router.push('/');
+			});
 		},
 		onBridgeReady() {
 			let that = this;
@@ -163,10 +181,18 @@ export default {
 }
 
 .pay_submit {
+	width: 100%;
+}
+
+.cancel_submit {
+	width: 100%;
+}
+.pay_cancel_div {
 	position: fixed;
 	bottom: 0;
 	width: 100%;
 }
+
 
 .pay_way_group img {
 	vertical-align: middle;

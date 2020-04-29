@@ -31,6 +31,7 @@
             :thumb="item.picUrl"
             :price="item.retailPrice"
             :origin-price="item.counterPrice"
+			currency="€"
             @click="itemClick(item.id)"
           />
 
@@ -49,7 +50,14 @@
       @buy-clicked="buyGoods"
       @add-cart="addCart"
     >
-      <template #sku-actions="props">
+		<template #sku-header-price="props">
+			<div class="van-sku__goods-price">
+				<span class="van-sku__price-symbol">€</span>
+				<span class="van-sku__price-num">{{ props.price }}</span>
+			</div>
+		</template>
+
+		<template #sku-actions="props">
         <div class="van-sku-actions">
           <van-button
             square

@@ -42,7 +42,7 @@
 <script>
 import { couponMyList } from '@/api/api';
 
-import { Tab, Tabs, Panel, Card, List, CouponCell, CouponList } from 'vant';
+import { Tab, Tabs, Panel, Card, List } from 'vant';
 import _ from 'lodash';
 
 export default {
@@ -100,9 +100,7 @@ export default {
     [Tabs.name]: Tabs,
     [Panel.name]: Panel,
     [Card.name]: Card,
-    [List.name]: List,
-    CouponCell,
-    CouponList
+    [List.name]: List
   }
 };
 </script>
