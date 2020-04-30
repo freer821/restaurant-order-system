@@ -1,33 +1,33 @@
 version: '3'
 services:
-  mysql57:
-    image: mysql:5.7
-    container_name: mysql
-    ports:
-      - "3306:3306"
-    command:
-      --character-set-server=utf8
-      --collation-server=utf8_general_ci
-      --default-authentication-plugin=mysql_native_password
-    volumes:
-      - ./db/conf.d:/etc/mysql/conf.d
-      - ./db/data:/var/lib/mysql
-      - ./db/init-sql:/docker-entrypoint-initdb.d
-    environment:
-      MYSQL_ROOT_PASSWORD: litemall123456
+  db:
+    image: mariadb
+    container_name: malldb
     restart: always
-  litemall:
-    build:
-      context: litemall
-      dockerfile: Dockerfile
-    container_name: litemall
-    ports:
-      - "8080:8080"
+    environment:
+      - MYSQL_ROOT_PASSWORD=qwer1234@
     volumes:
-      - ./litemall/storage:/storage
-      - ./litemall/logs:/logs
-      - ./litemall/backup:/backup
+      - ./db:/var/lib/mysql
+
+  mall:
+    image: mall
+    container_name: mall
+    ports:
+      - "9001:8080"
+    volumes:
+      - ./storage:/storage
+      - ./logs:/logs
+      - ./backup:/backup
       - /etc/localtime:/etc/localtime
     depends_on:
-      - mysql57
+      - db
     restart: always
+
+  phpmysqladmin:
+    image: phpmyadmin/phpmyadmin
+    volumes: 
+      - ./util/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
+    environment:
+      - PMA_HOST=db
+    ports:
+      - 9080:80
