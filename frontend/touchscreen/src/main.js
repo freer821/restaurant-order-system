@@ -32,7 +32,7 @@ Vue.use(Lazyload, {
   lazyComponent: true
 });
 
-import enUS from 'vant/lib/locale/lang/en-US';
+import enUS from './lang_en';
 Locale.use('en-US', enUS);
 Vue.use(Locale);
 
