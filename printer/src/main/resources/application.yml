@@ -1,0 +1,13 @@
+server:
+  port : 9031
+
+thermal:
+  printer:
+    # 热敏纸宽：mm58-58毫米 mm80-80毫米 userdefined-用户自定义宽度
+    paper-width: mm80
+    # 当paper-width为"userdefined"时，填写打印纸宽度，1 = 1/72nds of an inch
+    user-defined-width:
+    # 指定打印机名称，用默认打印机可无此项
+    printer-name:
+    # 是否打印日志
+    show-log: true

@@ -25,6 +25,7 @@
         <module>client</module>
         <module>admin</module>
         <module>main</module>
+        <module>printer</module>
     </modules>
 
     <dependencyManagement>

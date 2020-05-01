@@ -17,7 +17,7 @@
           </div>
         </div>
       </van-cell>
-    </van-cell-group>
+    </van-cell-group-->
 
     <van-cell-group>
       <van-cell
@@ -27,7 +27,7 @@
         :value="getCouponValue()"
         @click="getCoupons"
       />
-    </van-cell-group-->
+    </van-cell-group>
 
     <!-- 优惠券列表 -->
     <van-popup

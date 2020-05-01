@@ -52,8 +52,7 @@
 import { Radio, RadioGroup, Dialog } from 'vant';
 import { orderDetail, orderShoppay } from '@/api/api';
 import _ from 'lodash';
-import { getLocalStorage } from '@/utils/local-storage';
-
+import axios from 'axios';
 export default {
 	name: 'payment',
 
@@ -89,7 +88,7 @@ export default {
 						orderShoppay({ orderId: this.orderId })
 							.then(res => {
 								let data = res.data.data;
-								console.log(data)
+								this.print('paid');
 								Dialog.alert({
 									title: 'success pay!',
 									message: ''
@@ -99,6 +98,8 @@ export default {
 							})
 							.catch(err => {
 								Dialog.alert({ message: err });
+								this.print('error');
+
 								this.$router.replace({
 									name: 'paymentStatus',
 									params: {
@@ -107,9 +108,11 @@ export default {
 								});
 							});
 					} else {
+						this.print('unpaid');
+
 						Dialog.alert({
 							title: 'Cash Pay, please take your note and go to cashier desk!',
-							message: this.order
+							message: ''
 						}).then(() => {
 							this.$router.push('/');
 						});
@@ -127,38 +130,26 @@ export default {
 				this.$router.push('/');
 			});
 		},
-		onBridgeReady() {
-			let that = this;
-			let data = getLocalStorage('prepay_data');
-			// eslint-disable-next-line no-undef
-			WeixinJSBridge.invoke(
-				'getBrandWCPayRequest',
-				JSON.parse(data.prepay_data),
-				function(res) {
-					if (res.err_msg == 'get_brand_wcpay_request:ok') {
-						that.$router.replace({
-							name: 'paymentStatus',
-							params: {
-								status: 'success'
-							}
-						});
-					} else if (res.err_msg == 'get_brand_wcpay_request:cancel') {
-						that.$router.replace({
-							name: 'paymentStatus',
-							params: {
-								status: 'cancel'
-							}
-						});
-					} else {
-						that.$router.replace({
-							name: 'paymentStatus',
-							params: {
-								status: 'failed'
-							}
-						});
-					}
-				}
-			);
+		print(status) {
+			let orderdata = {}
+			orderdata.orderNo= this.order.orderInfo.orderSn;
+			orderdata.total= this.order.orderInfo.actualPrice;
+			orderdata.status= status;
+			orderdata.orderTime= this.order.orderInfo.addTime;
+			orderdata.items = [];
+			_.each(orderdata.orderGoods, (orderGood) => {
+				let description = orderGood.specifications.join()
+				orderdata.items.push({
+					title: orderGood.goodsName,
+					description: description
+				})
+			});
+
+			axios.post('http://127.0.0.1:9031/printer', orderdata).then(response => {
+				console.log(response);
+			}).catch(err =>{
+				console.log(err)
+			})
 		}
 	},
 
