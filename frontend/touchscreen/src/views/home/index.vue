@@ -297,26 +297,23 @@ export default {
 		},
 		addCart(data) {
 			let that = this;
+			let product = this.getProductByOne(data.selectedSkuComb.s1)
 			let params = {
 				goodsId: data.goodsId,
 				number: data.selectedNum,
-				productId: 0
+				name: this.good.info.name,
+				picUrl: this.good.info.picUrl,
+				...product
 			};
-			if (_.has(data.selectedSkuComb, 's3')) {
-				this.$toast({
-					message: '目前仅支持两规格',
-					duration: 1500
-				});
-				return;
-			} else if (_.has(data.selectedSkuComb, 's2')) {
-				params.productId = this.getProductId(
-					data.selectedSkuComb.s1,
-					data.selectedSkuComb.s2
-				);
-			} else {
-				params.productId = this.getProductIdByOne(data.selectedSkuComb.s1);
-			}
 			params.specifications = this.getSpecifications(data.selectedSkuComb.properties);
+
+			this.$store.dispatch('cart/addCart', params);
+			this.$toast({
+				message: '已添加至购物车',
+				duration: 1500
+			});
+			that.showSku = false;
+			/**
 			cartAdd(params).then(() => {
 				this.cartInfo = this.cartInfo + data.selectedNum;
 				this.$toast({
@@ -324,7 +321,7 @@ export default {
 					duration: 1500
 				});
 				that.showSku = false;
-			});
+			});*/
 		},
 		buyGoods(data) {
 			let that = this;
@@ -345,17 +342,18 @@ export default {
 					data.selectedSkuComb.s2
 				);
 			} else {
-				params.productId = this.getProductIdByOne(data.selectedSkuComb.s1);
+				params.productId = this.getProductByOne(data.selectedSkuComb.s1);
 			}
+			/**
 			cartFastAdd(params).then(res => {
 				let cartId = res.data.data;
 				setLocalStorage({ CartId: cartId });
 				that.showSku = false;
 				this.$router.push('/order/checkout');
-			});
+			});*/
 		},
-		getProductIdByOne(s1) {
-			let productId;
+		getProductByOne(s1) {
+			let product = {};
 			let s1_name;
 			_.each(this.good.specificationList, specification => {
 				_.each(specification.valueList, specValue => {
@@ -369,10 +367,15 @@ export default {
 			_.each(this.good.productList, v => {
 				let result = _.without(v.specifications, s1_name);
 				if (result.length === 0) {
-					productId = v.id;
+					product = {
+						product_id: v.id,
+						product_ame:s1_name,
+						price: v.price,
+						product_url: v.url
+					};
 				}
 			});
-			return productId;
+			return product;
 		},
 		getSpecifications(properties) {
 			let specifications = [];

@@ -26,8 +26,7 @@ export default {
 
   methods: {
     getLoginStatus() {
-      this.isLogin =
-        !!localStorage.getItem('Authorization');
+      this.isLogin = !this.$store.getters.token
     }
   },
 

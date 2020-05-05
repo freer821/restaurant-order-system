@@ -1,5 +1,8 @@
 import axios from 'axios'
 import { Dialog, Toast } from 'vant';
+import store from '@/store'
+import { getToken } from '@/utils/auth'
+
 
 // create an axios instance
 const service = axios.create({
@@ -11,9 +14,9 @@ const service = axios.create({
 service.interceptors.request.use(
     config => {
     if (!config.headers['X-Litemall-Token']) {
-      config.headers['X-Litemall-Token'] = `${window.localStorage.getItem(
-        'Authorization'
-      ) || ''}`;
+		if (store.getters.token) {
+			config.headers['X-Litemall-Token'] = getToken();
+		}
     }
     return config;
   },
