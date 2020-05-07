@@ -16,12 +16,12 @@ export default {
 	data() {
 		return {
 			active: 0,
-			//num_cart: this.$store.getters.num_selected_goods
+			//num_cart: this.$store.getters.num_cart_goods
 		};
 	},
 	computed: {
 		num_cart () {
-			return this.$store.getters.num_selected_goods;
+			return this.$store.getters.num_cart_goods;
 		}
 	},
 	components: {

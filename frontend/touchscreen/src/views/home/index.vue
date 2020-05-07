@@ -176,7 +176,18 @@ export default {
 			this.sku = {
 				tree,
 				list,
-				...skuInfo
+				...skuInfo,
+				messages: [
+					{
+						// 商品留言
+						datetime: '0', // 留言类型为 time 时，是否含日期。'1' 表示包含
+						multiple: '0', // 留言类型为 text 时，是否多行文本。'1' 表示多行
+						name: 'Comment', // 留言名称
+						type: 'text', // 留言类型，可选: id_no（身份证）, text, tel, date, time, email
+						required: '0', // 是否必填 '1' 表示必填
+						placeholder: 'if you have specification requirements, please let me know! ' // 可选值，占位文本
+					}
+				],
 			};
 			this.skuGoods = {
 				title: this.good.info.name,
@@ -296,6 +307,7 @@ export default {
 			this.showSku = true;
 		},
 		addCart(data) {
+			console.log(data);
 			let that = this;
 			let product = this.getProductByOne(data.selectedSkuComb.s1)
 			let params = {
@@ -303,7 +315,9 @@ export default {
 				number: data.selectedNum,
 				name: this.good.info.name,
 				picUrl: this.good.info.picUrl,
-				...product
+				price: (data.selectedSkuComb.price + data.selectedSkuComb.property_price)/100,
+				...product,
+				comment: data.messages.message_0? data.messages.message_0: ''
 			};
 			params.specifications = this.getSpecifications(data.selectedSkuComb.properties);
 
@@ -370,7 +384,6 @@ export default {
 					product = {
 						product_id: v.id,
 						product_ame:s1_name,
-						price: v.price,
 						product_url: v.url
 					};
 				}

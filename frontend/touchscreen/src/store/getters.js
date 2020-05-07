@@ -2,8 +2,8 @@ const getters = {
 	token: state => state.user.token,
 	avatar: state => state.user.avatar,
 	name: state => state.user.username,
-	selected_goods: state => state.cart.selected_goods,
-	num_selected_goods: state => state.cart.num_selected_goods,
-	selected_goods_fee: state => state.cart.selected_goods_fee
+	cart_goods: state => state.cart.cart_goods,
+	num_cart_goods: state => state.cart.num_cart_goods,
+	fee_cart_goods: state => state.cart.fee_cart_goods
 }
 export default getters
