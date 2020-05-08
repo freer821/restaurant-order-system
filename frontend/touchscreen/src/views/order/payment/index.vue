@@ -1,30 +1,33 @@
 <template>
   <div class="payment">
     <div class="time_down payment_group">
-      Please finish the Payment
+      Only Credit Card accepted! Please finish the Payment
       <span class="red">in 30 minutes</span>
       ，Otherwise this Order will be canceled!
     </div>
 
     <van-cell-group class="payment_group">
-      <van-cell
-        title="Order No.:"
-        :value="order.orderInfo.orderSn"
-      />
       <van-cell title="Total:">
-        <span class="red">{{order.orderInfo.actualPrice *100 | euro}}</span>
+        <span class="red">{{order.actualPrice *100 | euro}}</span>
       </van-cell>
+		<van-field
+			v-model="order.message"
+			placeholder="Comment"
+			label="Comment"
+		>
+			<template slot="icon">{{order.message.length}}/50</template>
+		</van-field>
     </van-cell-group>
 
     <div class="pay_way_group">
-      <div class="pay_way_title">Payment</div>
-      <van-radio-group v-model="payWay">
+      <div class="pay_way_title">Eat Way</div>
+      <van-radio-group v-model="order.eatway">
         <van-cell-group>
-          <van-cell title="Credit Card">
-            <van-radio name="credit" />
+          <van-cell title="Eat in">
+            <van-radio name="eatin" />
           </van-cell>
-          <van-cell title="Cash">
-            <van-radio name="cash" />
+          <van-cell title="Take Away">
+            <van-radio name="takeaway" />
           </van-cell>
         </van-cell-group>
       </van-radio-group>
@@ -49,7 +52,7 @@
 </template>
 
 <script>
-import { Radio, RadioGroup, Dialog } from 'vant';
+import { Radio, RadioGroup, Dialog, Field } from 'vant';
 import { orderDetail, orderShoppay } from '@/api/api';
 import _ from 'lodash';
 import axios from 'axios';
@@ -58,65 +61,23 @@ export default {
 
 	data() {
 		return {
-			payWay: 'cash',
-			order: {
-				orderInfo: {},
-				orderGoods: []
-			},
-			orderId: 0
+			order:{
+				eatway: 'eatin',
+				actualPrice: this.$store.getters.fee_cart_goods,
+				message:'',
+				goods: Object.values(this.$store.getters.cart_goods)
+			}
 		};
 	},
-	created() {
-		if (_.has(this.$route.params, 'orderId')) {
-			this.orderId = this.$route.params.orderId;
-			this.getOrder(this.orderId);
-		}
-	},
 	methods: {
-		getOrder(orderId) {
-			orderDetail({ orderId: orderId }).then(res => {
-				this.order = res.data.data;
-			});
-		},
 		pay() {
 			Dialog.confirm({
-				message:
-					'You have chosen' + (this.payWay === 'cash' ? 'Cash Pay' : 'Credit Pay')
+				message: 'thank you for your visit!'
 			})
 				.then(() => {
-					if (this.payWay === 'credit') {
-						orderShoppay({ orderId: this.orderId })
-							.then(res => {
-								let data = res.data.data;
-								this.print('paid');
-								Dialog.alert({
-									title: 'success pay!',
-									message: ''
-								}).then(() => {
-									this.$router.push('/');
-								});
-							})
-							.catch(err => {
-								Dialog.alert({ message: err });
-								this.print('error');
-
-								this.$router.replace({
-									name: 'paymentStatus',
-									params: {
-										status: 'failed'
-									}
-								});
-							});
-					} else {
-						this.print('unpaid');
-
-						Dialog.alert({
-							title: 'Cash Pay, please take your note and go to cashier desk!',
-							message: ''
-						}).then(() => {
-							this.$router.push('/');
-						});
-					}
+					console.log(this.order);
+					this.$store.dispatch('cart/clearCart')
+					this.$router.push('/');
 				})
 				.catch(err => {
 					console.log(err);
@@ -156,7 +117,8 @@ export default {
 	components: {
 		[Radio.name]: Radio,
 		[RadioGroup.name]: RadioGroup,
-		[Dialog.name]: Dialog
+		[Dialog.name]: Dialog,
+		[Field.name]: Field
 	}
 };
 </script>

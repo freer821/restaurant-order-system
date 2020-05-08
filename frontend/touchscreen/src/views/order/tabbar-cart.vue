@@ -13,6 +13,7 @@
 					currency="€"
 				>
 					<div slot="desc">
+						{{item.product_ame}}
 						<div class="van-card__desc">
 							<van-tag
 								plain
@@ -80,7 +81,7 @@
 				this.$store.dispatch('cart/changeGoodsNumInCart', {cart_id: item.id, num: arg[0]});
 			},
 			cartSubmit() {
-				this.$router.push('/order/checkout');
+				this.$router.push('/order/payment');
 			},
 			deleteCart(item) {
 				this.$dialog

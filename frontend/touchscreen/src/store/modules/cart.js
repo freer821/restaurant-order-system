@@ -32,6 +32,7 @@ const mutations = {
 	CLEAR_CART: (state) => {
 		state.cart_goods = {};
 		state.num_cart_goods = 0;
+		state.fee_cart_goods = 0;
 	},
 	CALC_CART: (state) => {
 		let num_total = 0;
@@ -57,7 +58,11 @@ const actions = {
 	removeGoodFromCart({commit}, cart_id) {
 		commit('REMOVE_GOODS_FROM_CART', cart_id);
 		commit('CALC_CART');
+	},
+	clearCart({commit}) {
+		commit('CLEAR_CART');
 	}
+
 }
 
 export default {

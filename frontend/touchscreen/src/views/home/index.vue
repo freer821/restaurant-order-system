@@ -327,44 +327,10 @@ export default {
 				duration: 1500
 			});
 			that.showSku = false;
-			/**
-			cartAdd(params).then(() => {
-				this.cartInfo = this.cartInfo + data.selectedNum;
-				this.$toast({
-					message: '已添加至购物车',
-					duration: 1500
-				});
-				that.showSku = false;
-			});*/
 		},
 		buyGoods(data) {
-			let that = this;
-			let params = {
-				goodsId: data.goodsId,
-				number: data.selectedNum,
-				productId: 0
-			};
-			if (_.has(data.selectedSkuComb, 's3')) {
-				this.$toast({
-					message: '目前仅支持两规格',
-					duration: 1500
-				});
-				return;
-			} else if (_.has(data.selectedSkuComb, 's2')) {
-				params.productId = this.getProductId(
-					data.selectedSkuComb.s1,
-					data.selectedSkuComb.s2
-				);
-			} else {
-				params.productId = this.getProductByOne(data.selectedSkuComb.s1);
-			}
-			/**
-			cartFastAdd(params).then(res => {
-				let cartId = res.data.data;
-				setLocalStorage({ CartId: cartId });
-				that.showSku = false;
-				this.$router.push('/order/checkout');
-			});*/
+			this.addCart(data);
+			this.$router.push('/order');
 		},
 		getProductByOne(s1) {
 			let product = {};
