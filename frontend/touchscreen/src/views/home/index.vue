@@ -323,7 +323,7 @@ export default {
 
 			this.$store.dispatch('cart/addCart', params);
 			this.$toast({
-				message: '已添加至购物车',
+				message: this.$t('app.addCart'),
 				duration: 1500
 			});
 			that.showSku = false;
